@@ -1,64 +1,23 @@
 <p align="center">
   <a href="https://solana.com">
     <img alt="Solana" src="https://i.imgur.com/uBVzyX3.png" width="250" />
+    <img alt="Chainlink" src="https://i.imgur.com/GPpjgHf.png" width="100" height="100" />
   </a>
 </p>
 
-[![Build status][travis-image]][travis-url] [![Gitpod
-Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/solana-labs/example-helloworld)
 
-[travis-image]:
-https://travis-ci.org/solana-labs/example-helloworld.svg?branch=master
-[travis-url]: https://travis-ci.org/solana-labs/example-helloworld
+# Chainlink Price Feeds on Solana
 
-# Hello world on Solana
+Chainlink is a decentralized oracle network that currently provides decentralization at both the oracle and data source level. By using multiple independent Chainlink nodes, the user can defend against one oracle being a single point of failure. Similarly, using multiple data sources for sourcing market prices, the user can defend against one data source being a single source of truth.
 
-This project demonstrates how to use the [Solana Javascript
-API](https://github.com/solana-labs/solana-web3.js) to
-interact with programs on the Solana blockchain.
+This project demonstrates how to use the [Chainlink Price Data Feeds](https://docs.chain.link/docs/using-chainlink-reference-contracts/) to enable Solana Rust programs to retrieve the latest pricing data of an asset in a single call.
 
-The project comprises of:
+We are going to:
 
-* An on-chain hello world program
-* A client that can send a "hello" to an account and get back the number of
-  times "hello" has been sent
-
-## Translations
-- [Traditional Chinese](README_ZH_TW.md)
-- [Simplified Chinese](README_ZH_CN.md)
-
-## Table of Contents
-- [Hello world on Solana](#hello-world-on-solana)
-  - [Table of Contents](#table-of-contents)
-  - [Quick Start](#quick-start)
-    - [Configure CLI](#configure-cli)
-    - [Start local Solana cluster](#start-local-solana-cluster)
-    - [Install npm dependencies](#install-npm-dependencies)
-    - [Build the on-chain program](#build-the-on-chain-program)
-    - [Deploy the on-chain program](#deploy-the-on-chain-program)
-    - [Run the JavaScript client](#run-the-javascript-client)
-    - [Expected output](#expected-output)
-      - [Not seeing the expected output?](#not-seeing-the-expected-output)
-    - [Customizing the Program](#customizing-the-program)
-  - [Learn about Solana](#learn-about-solana)
-  - [Learn about the client](#learn-about-the-client)
-    - [Entrypoint](#entrypoint)
-    - [Establish a connection to the cluster](#establish-a-connection-to-the-cluster)
-    - [Load the helloworld on-chain program if not already loaded](#load-the-helloworld-on-chain-program-if-not-already-loaded)
-    - [Send a "Hello" transaction to the on-chain program](#send-a-hello-transaction-to-the-on-chain-program)
-    - [Query the Solana account used in the "Hello" transaction](#query-the-solana-account-used-in-the-hello-transaction)
-  - [Learn about the on-chain program](#learn-about-the-on-chain-program)
-    - [Programming on Solana](#programming-on-Solana)
-  - [Pointing to a public Solana cluster](#pointing-to-a-public-solana-cluster)
-  - [Expand your skills with advanced examples](#expand-your-skills-with-advanced-examples)
+* write and deploy a Rust Program on the Solana [Devnet](https://docs.solana.com/clusters)
+* Retrieve data feeds using the Solana Web3 JavaScript API using Node
 
 ## Quick Start
-
-[![Open in
-Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/solana-labs/example-helloworld)
-
-If you decide to open in Gitpod then refer to
-[README-gitpod.md](README-gitpod.md), otherwise continue reading.
 
 The following dependencies are required to build and run this example, depending
 on your OS, they may already be installed:
@@ -90,20 +49,6 @@ If this is your first time using the Solana CLI, you will need to generate a new
 solana-keygen new
 ```
 
-### Start local Solana cluster
-
-This example connects to a local Solana cluster by default.
-
-Start a local Solana cluster:
-```bash
-solana-test-validator
-```
-> **Note**: You may need to do some [system tuning](https://docs.solana.com/running-validator/validator-start#system-tuning) (and restart your computer) to get the validator to run
-
-Listen to transaction logs:
-```bash
-solana logs
-```
 
 ### Install npm dependencies
 
@@ -151,21 +96,6 @@ Saying hello to 8MBmHtJvxpKdYhdw6yPpedp6X6y2U9dCpdYaZJdmwV3A
 Success
 ```
 
-#### Not seeing the expected output?
-
-- Ensure you've [started the local cluster](#start-local-solana-cluster),
-  [built the on-chain program](#build-the-on-chain-program) and [deployed the program to the cluster](#deploy-the-on-chain-program).
-- Inspect the program logs by running `solana logs` to see why the program failed.
-  - ```bash
-    Transaction executed in slot 5621:
-    Signature: 4pya5iyvNfAZj9sVWHzByrxdKB84uA5sCxLceBwr9UyuETX2QwnKg56MgBKWSM4breVRzHmpb1EZQXFPPmJnEtsJ
-    Status: Error processing Instruction 0: Program failed to complete
-    Log Messages:
-      Program G5bbS1ipWzqQhekkiCLn6u7Y1jJdnGK85ceSYLx2kKbA invoke [1]
-      Program log: Hello World Rust program entrypoint
-      Program G5bbS1ipWzqQhekkiCLn6u7Y1jJdnGK85ceSYLx2kKbA consumed 200000 of 200000 compute units
-      Program failed to complete: exceeded maximum number of instructions allowed (200000) at instruction #334
-      Program G5bbS1ipWzqQhekkiCLn6u7Y1jJdnGK85ceSYLx2kKbA failed: Program failed to complete
 
 ### Customizing the Program
 
@@ -174,81 +104,6 @@ any files under `/src/program-rust` or `/src/program-c` you will need to
 [rebuild the on-chain program](#build-the-on-chain-program) and [redeploy the program](#deploy-the-on-chain-program).
 
 Now when you rerun `npm run start`, you should see the results of your changes.
-
-## Learn about Solana
-
-More information about how Solana works is available in the [Solana
-documentation](https://docs.solana.com/) and all the source code is available on
-[github](https://github.com/solana-labs/solana)
-
-Further questions? Visit us on [Discord](https://discordapp.com/invite/pquxPsq)
-
-## Learn about the client
-
-The client in this example is written in TypeScript using:
-- [Solana web3.js SDK](https://github.com/solana-labs/solana-web3.js)
-- [Solana web3 API](https://solana-labs.github.io/solana-web3.js)
-
-### Entrypoint
-
-The [client's
-entrypoint](https://github.com/solana-labs/example-helloworld/blob/ad52dc719cdc96d45ad8e308e8759abf4792b667/src/client/main.ts#L13)
-does five things.
-
-### Establish a connection to the cluster
-
-The client establishes a connection with the cluster by calling
-[`establishConnection`](https://github.com/solana-labs/example-helloworld/blob/ad52dc719cdc96d45ad8e308e8759abf4792b667/src/client/hello_world.ts#L92).
-
-### Establish an account to pay for transactions
-
-The client ensures there is an account available to pay for transactions,
-and creates one if there is not, by calling
-[`establishPayer`](https://github.com/solana-labs/example-helloworld/blob/ad52dc719cdc96d45ad8e308e8759abf4792b667/src/client/hello_world.ts#L102).
-
-### Check if the helloworld on-chain program has been deployed
-
-In [`checkProgram`](https://github.com/solana-labs/example-helloworld/blob/ad52dc719cdc96d45ad8e308e8759abf4792b667/src/client/hello_world.ts#L144),
-the client loads the keypair of the deployed program from `./dist/program/helloworld-keypair.json` and uses
-the public key for the keypair to fetch the program account. If the program doesn't exist, the client halts
-with an error. If the program does exist, it will create a new account with the program assigned as its owner
-to store program state (number of hello's processed).
-
-### Send a "Hello" transaction to the on-chain program
-
-The client then constructs and sends a "Hello" transaction to the program by
-calling
-[`sayHello`](https://github.com/solana-labs/example-helloworld/blob/ad52dc719cdc96d45ad8e308e8759abf4792b667/src/client/hello_world.ts#L209).
-The transaction contains a single very simple instruction that primarily carries
-the public key of the helloworld program account to call and the "greeter"
-account to which the client wishes to say "Hello" to.
-
-### Query the Solana account used in the "Hello" transaction
-
-Each time the client says "Hello" to an account, the program increments a
-numerical count in the "greeter" account's data.  The client queries the
-"greeter" account's data to discover the current number of times the account has
-been greeted by calling
-[`reportGreetings`](https://github.com/solana-labs/example-helloworld/blob/ad52dc719cdc96d45ad8e308e8759abf4792b667/src/client/hello_world.ts#L226).
-
-## Learn about the on-chain program
-
-The [on-chain helloworld program](/src/program-rust/Cargo.toml) is a Rust program
-compiled to [Berkeley Packet Filter
-(BPF)](https://en.wikipedia.org/wiki/Berkeley_Packet_Filter) bytecode and stored as an
-[Executable and Linkable Format (ELF) shared
-object](https://en.wikipedia.org/wiki/Executable_and_Linkable_Format).
-
-The program is written using:
-- [Solana Rust SDK](https://github.com/solana-labs/solana/tree/master/sdk)
-
-### Programming on Solana
-
-To learn more about Solana programming model refer to the [Programming Model
-Overview](https://docs.solana.com/developing/programming-model/overview).
-
-To learn more about developing programs on Solana refer to the [On-Chain 
-Programs Overview](https://docs.solana.com/developing/on-chain-programs/overview)
 
 ## Pointing to a public Solana cluster
 
@@ -269,15 +124,3 @@ To point back to the local cluster:
 solana config set --url localhost
 ```
 
-## Expand your skills with advanced examples
-
-There is lots more to learn; The following examples demonstrate more advanced
-features like custom errors, advanced account handling, suggestions for data
-serialization, benchmarking, etc...
-
-- [Programming
-  Examples](https://github.com/solana-labs/solana-program-library/tree/master/examples)
-- [Token
-  Program](https://github.com/solana-labs/solana-program-library/tree/master/token)
-- [Token Swap
-  Program](https://github.com/solana-labs/solana-program-library/tree/master/token-swap)
